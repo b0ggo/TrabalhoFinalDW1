@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendário</title>
+</head>
+<body>
+    <h1>Cadastrar Nova Tarefa</h1>
+    <div>
+        <label for="prioridade">Prioridade:</label>
+        <select id="prioridade" required>
+        <option value="">Selecione...</option>
+        <option value="Baixa">Baixa</option>
+        <option value="Normal">Normal</option>
+        <option value="Urgente">Urgente</option>
+        </select><br><br>
+
+        <label for="descricao">Descrição:</label>
+        <input type="text" id="descricao"><br><br>
+
+        <label for="local">Local:</label>
+        <input type="text" id="local"><br><br>
+
+        <label for="recursos">Recursos necessários separados por vírgulas:</label>
+        <input type="text" id="recursos"><br><br>
+
+        <label for="dataLimite">Data limite:</label>
+        <input type="datetime-local" id="dataLimite"><br><br>
+
+        <label for="matricula">Matrícula:</label>
+        <input type="number" id="matricula"><br><br>
+
+        <button onclick="salvar()">Salvar</button>
+    </div>
+</body>
+</html>
