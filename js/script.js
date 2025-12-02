@@ -1,7 +1,7 @@
 function salvartarefa() {
     const urlBase = 'http://159.65.228.63/';
     const dados = {
-        prioeidade : "Urgente",
+        prioridade : "Urgente",
         descricao : " Entregar trabalho final DW l",
         recursosNecessario : ["Computador", "Internet", "Exemplos anteriores"],
         dataLimite : "2025-12-03 00:00:00",
