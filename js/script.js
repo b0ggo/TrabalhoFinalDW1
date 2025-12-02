@@ -1,99 +1,62 @@
-function salvartarefa() {
-    const urlBase = 'http://159.65.228.63/';
-    const dados = {
-        prioridade : "Urgente",
-        descricao : " Entregar trabalho final DW l",
-        recursosNecessario : ["Computador", "Internet", "Exemplos anteriores"],
-        dataLimite : "2025-12-03 00:00:00",
-        matricula : "2025306766"
+const urlBase = 'http://159.65.228.63/';
+const endpoint = 'tarefas';
+let dados = [];
+
+async function atualizar() {
+    const lista = document.getElementById('lista-tarefas');
+    lista.innerHTML = '<p>Carregando tarefas...</p>';
+
+    try {
+        const response = await fetch(urlBase + endpoint);
+        dados = await response.json();
+
+        if (!dados || dados.length === 0) {
+            lista.innerHTML = '<p>Nenhuma tarefa cadastrada</p>';
+            return;
+        }
+
+        const table = document.createElement('table');
+        table.setAttribute('border', '1');
+        const header = document.createElement('tr');
+        const colunas = ['Prioridade', 'Descrição', 'Local', 'Recursos', 'Data Limite', 'Matrícula'];
+        colunas.forEach(titulo => {
+            const th = document.createElement('th');
+            th.textContent = titulo;
+            header.appendChild(th);
+        });
+        table.appendChild(header);
+
+        dados.forEach(tarefa => {
+            const tr = document.createElement('tr');
+            tr.style.color = tarefa.prioridade === 'Urgente' ? 'red' : 'black';
+
+            const tdPrioridade = document.createElement('td');
+            tdPrioridade.textContent = tarefa.prioridade;
+            const tdDescricao = document.createElement('td');
+            tdDescricao.textContent = tarefa.descricao;
+            const tdLocal = document.createElement('td');
+            tdLocal.textContent = tarefa.local;
+            const tdRecursos = document.createElement('td');
+            tdRecursos.textContent = (tarefa.recursosNecessarios || []).join(', ');
+            const tdData = document.createElement('td');
+            tdData.textContent = tarefa.dataLimite;
+            const tdMatricula = document.createElement('td');
+            tdMatricula.textContent = tarefa.matricula;
+
+            tr.appendChild(tdPrioridade);
+            tr.appendChild(tdDescricao);
+            tr.appendChild(tdLocal);
+            tr.appendChild(tdRecursos);
+            tr.appendChild(tdData);
+            tr.appendChild(tdMatricula);
+            table.appendChild(tr);
+        });
+
+        lista.innerHTML = '';
+        lista.appendChild(table);
+
+    } catch (erro) {
+        console.error('Erro ao carregar tarefas:', erro);
+        lista.innerHTML = '<p>Erro ao carregar tarefas.</p>';
     }
 }
-var dados = []
-
-        async function atualizar() {
-            const response = await fetch(urlBase+'produtos')
-            dados = await response.json();
-            criarTabela(dados)
-        }
-
-        function criarTabela(produtos) {
-            document.getElementById("lista").innerHTML = "";
-            const table = document.createElement("table");
-            table.setAttribute("border", "1");
-
-            const row = document.createElement("tr");
-            const td1 = document.createElement("th");
-            td1.textContent = 'ID';
-            const td2 = document.createElement("th");
-            td2.textContent = 'Código de Barras';
-            const td3 = document.createElement("th");
-            td3.textContent = 'Nome';
-            const td4 = document.createElement("th");
-            td4.textContent = 'Valor';
-            row.appendChild(td1);
-            row.appendChild(td2);
-            row.appendChild(td3);
-            row.appendChild(td4);
-            table.appendChild(row);
-            
-            for (const produto of produtos) {
-                const rowDados = document.createElement("tr");
-                const tdId = document.createElement("td");
-                const tdCodBarras = document.createElement("td");
-                const tdNome = document.createElement("td");
-                const tdValor = document.createElement("td");
-                tdId.textContent = produto.id;
-                tdCodBarras.textContent = produto.codBarras
-                tdNome.textContent = produto.nome
-                tdValor.textContent = produto.valor
-
-                rowDados.appendChild(tdId);
-                rowDados.appendChild(tdCodBarras);
-                rowDados.appendChild(tdNome)
-                rowDados.appendChild(tdValor)
-                table.appendChild(rowDados)
-            }
-            const container = document.getElementById('lista');
-            container.appendChild(table);
-        }
-
-        async function salvar(){
-            if (document.getElementById('codigobarras').value == '') {
-                alert('Código de barras inválido');
-                return
-            }
-            if (document.getElementById('nome').value == '') {
-                alert('Nome inválido');
-                return
-            }
-            if (document.getElementById('valor').value == '') {
-                alert('Valor inválido');
-                return
-            }
-
-            for (const produto of dados) {
-                if (document.getElementById('nome').value == produto.nome) {
-                    console.log(document.getElementById('nome').value, produto.nome)
-                    alert('Produto ja está na lista')
-                    return
-                }
-            }
-
-            const dadosInsert = {
-                codBarras: document.getElementById('codigobarras').value,
-                nome: document.getElementById('nome').value,
-                valor: document.getElementById('valor').value
-            }
-
-            await fetch(urlBase+'produtos', {
-                method: 'POST',
-                headers: {
-                    'content-type': 'application/json'
-                },
-                body: JSON.stringify(dadosInsert)
-            })
-
-            atualizar()
-
-            alert('Produto salvo :)')
-        }
