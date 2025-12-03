@@ -1,5 +1,5 @@
 const urlBase = 'http://159.65.228.63/';
-const endpoint = 'produtos';
+const endpoint = 'tarefas';
 
 async function salvartarefa() {
     const prioridade = document.getElementById('prioridade').value;
